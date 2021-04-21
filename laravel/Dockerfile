@@ -4,10 +4,14 @@ WORKDIR /var/www
 
 RUN apt-get update && \
     apt-get install libzip-dev -y && \
-    docker-php-ext-install zip &&
+    docker-php-ext-install zip
 
 RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" && \
     php composer-setup.php && \
-    php -r "unlink('composer-setup.php');" &&
+    php -r "unlink('composer-setup.php');"
 
 RUN php composer.phar create-project laravel/laravel docker_laravel
+
+ENTRYPOINT [ "php", "docker_laravel/artisan", "serve" ]
+
+CMD [ "--host=0.0.0.0" ]
